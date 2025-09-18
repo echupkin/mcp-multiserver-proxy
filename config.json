@@ -1,0 +1,75 @@
+{
+  "servers": {
+    "flights": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@smamidipaka6/flights-mcp-server"],
+      "env": {
+        "AMADEUS_API_KEY": "your_amadeus_api_key",
+        "AMADEUS_API_SECRET": "your_amadeus_api_secret"
+      },
+      "description": "Flight search and booking MCP server"
+    },
+    "weather": {
+      "type": "stdio", 
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-weather"],
+      "env": {
+        "OPENWEATHER_API_KEY": "your_openweather_api_key"
+      },
+      "description": "Weather information MCP server"
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
+      "description": "File system operations MCP server"
+    },
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "your_brave_api_key"
+      },
+      "description": "Brave search MCP server"
+    },
+    "postgres": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://user:password@localhost:5432/dbname"
+      },
+      "description": "PostgreSQL database MCP server"
+    },
+    "external-http-server": {
+      "type": "http",
+      "url": "https://api.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer your-token",
+        "Content-Type": "application/json"
+      },
+      "description": "External HTTP MCP server"
+    },
+    "sse-server": {
+      "type": "sse",
+      "url": "https://sse.example.com/events",
+      "headers": {
+        "Authorization": "Bearer your-sse-token"
+      },
+      "description": "Server-Sent Events MCP server"
+    }
+  },
+  "gateway": {
+    "port": 3000,
+    "cors": {
+      "origin": "*",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    },
+    "rateLimit": {
+      "windowMs": 60000,
+      "max": 100
+    }
+  }
+}

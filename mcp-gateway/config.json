@@ -1,0 +1,42 @@
+{
+  "servers": {
+    "flights": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@smamidipaka6/flights-mcp-server"],
+      "env": {
+        "AMADEUS_API_KEY": "",
+        "AMADEUS_API_SECRET": ""
+      },
+      "description": "Flight search and booking MCP server"
+    },
+    "weather": {
+      "type": "stdio",
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-weather"],
+      "env": {
+        "OPENWEATHER_API_KEY": ""
+      },
+      "description": "Weather information MCP server"
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
+      "description": "File system operations MCP server"
+    },
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Web scraping and HTTP requests MCP server"
+    }
+  },
+  "gateway": {
+    "port": 3000,
+    "cors": {
+      "origin": "*",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }
+  }
+}

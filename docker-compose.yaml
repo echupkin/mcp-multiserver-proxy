@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mcp-gateway:
+    build: .
+    ports:
+      - "8090:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BASE_URL=http://localhost:3000
+      - CONFIG_PATH=/app/config.json
+      - CORS_ORIGIN=*
+      # API Keys (set these in your .env file)
+      - AMADEUS_API_KEY=${AMADEUS_API_KEY}
+      - AMADEUS_API_SECRET=${AMADEUS_API_SECRET}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./logs:/app/logs
+      - /tmp:/tmp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a PostgreSQL database for the postgres MCP server
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=mcpdb
+      - POSTGRES_USER=mcpuser
+      - POSTGRES_PASSWORD=mcppassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5434:5434"
+    restart: unless-stopped
+
+  # Optional: Add Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
